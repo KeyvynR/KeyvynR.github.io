@@ -9,10 +9,43 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Example Student's Assignment 1!</h1>
+    <h1>Keyvyn Rogers Assignment 1</h1>
     <div class="header">
-      <img src="red-panda.jpg" />
-      <p>Here is all the documentation for assignment 1!</p>
+      <img src="HCDE439-a1-schematic.jpg" />
+      <img src="HCDE439-a1-additional questions.jpg" />
     </div>
+
+    <!-- Adding the code snippet below the images -->
+    <pre>
+<code>
+void setup() {
+  pinMode(11, OUTPUT); // Initializing GPIO pin 11 to light up LED
+  pinMode(12, OUTPUT); // Initializing GPIO pin 12 to light up LED
+  pinMode(13, OUTPUT); // Initializing GPIO pin 13 to light up LED
+}
+
+void loop() {
+
+  // This is for my first red LED
+  digitalWrite(11, HIGH); // Turn LED on
+  delay(); //LED on for 500 ms
+  digitalWrite(11, LOW); // Turn LED off
+  delay(500); //LED off for 500 ms
+
+  // This is for my green LED
+  digitalWrite(12, HIGH); // Turn LED on
+  delay(500); //LED on for 500 ms
+  digitalWrite(12, LOW); // Turn LED off
+  delay(500); //LED off for 500 ms
+
+  //This is for my last red LED
+  digitalWrite(13, HIGH); // Turn LED on
+  delay(500); //LED on for 500 ms
+  digitalWrite(13, LOW); // Turn LED off
+  delay(500); //LED off for 500 ms
+}
+</code>
+    </pre>
   </body>
 </html>
+
