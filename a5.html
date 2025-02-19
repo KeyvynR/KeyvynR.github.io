@@ -16,6 +16,22 @@
       <img src="A5.GIF" />
     </div>
     <pre>
+    There are a few important points in the circut I would
+    like to highlight.
+
+    Firstly, the dc motor is connected directly to 5 volts from
+    a external power source. The dc motor on the negative terminal 
+    is connected to the drain on the MOSFET which has a toggling voltage
+    from 0 - 5 volts.
+    As pin 9 is connected to the gate of the transistor,
+    the voltage measured there will vary between 0 and 5 volts (PWM).
+    5 Volts is powering the DC motor with the negative end connected directly to
+    the drain. At the source is measured 0 volts as it is connected to ground.
+
+    The transistor is rated to handle 37.2A of current and the dc motor
+    draws well below that.
+    </pre>
+    <pre>
 <code>
   #include <CapacitiveSensor.h> //Importing capacitive sensor library
 
