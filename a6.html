@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Keyvyn Rogers Assignment 6!</h1>
+    <div class="header">
+      <img src="A6_Schematic.jpg" />
+      <img src="A6_Circuit.jpeg" />
+      <img src="A6/A6.GIF" />
+    </div>
+    <pre>
+<code>
+// Here is my JS Code:
+// This code is modified from the ball example given
+const BAUD_RATE = 9600; // This should match the baud rate in your Arduino sketch
+let port, connectBtn, slider; // Declare global variables
+
+function setup() {
+  setupSerial(); // Run our serial setup function (below)
+
+  // Create a canvas that is the size of our browser window.
+  // windowWidth and windowHeight are p5 variables
+  createCanvas(windowWidth, windowHeight);
+
+  textFont("system-ui", 50);
+  textStyle(BOLD);
+  textAlign(CENTER, CENTER);
+
+  slider  = createSlider(0, 180, 90); // Range of servo motor positions
+  slider.position(windowWidth / 2 - 75, windowHeight / 2); // Centered position
+  slider.style('width', '300px'); // Set slider width
+}
+
+function draw() {
+
+  fill(0); // Set text color to black
+  text("Slide to set Servo position", width / 2, height / 2 - 40);
+
+  const portIsOpen = checkPort(); // Check whether the port is open (see checkPort function below)
+  if (!portIsOpen) return; // If the port is not open, exit the draw loop
+
+  let angle = slider.value();
+  console.log(angle);
+  if(port.opened()) {
+    port.write(angle + "\n");
+  }
+
+  //Going from arduino to JS
+  let str = port.readUntil("\n").trim(); // Read from the port until the newline
+  if (str.length == 0) return; // If we didn't read anything, return.
+
+  const y_state = Number(str.trim());
+
+  if(y_state == 15){
+    background('blue');
+  }
+
+}
+
+// Three helper functions for managing the serial connection.
+
+function setupSerial() {
+  port = createSerial();
+
+  // Check to see if there are any ports we have used previously
+  let usedPorts = usedSerialPorts();
+  if (usedPorts.length > 0) {
+    // If there are ports we've used, open the first one
+    port.open(usedPorts[0], BAUD_RATE);
+  }
+
+  // create a connect button
+  connectBtn = createButton("Connect to Arduino");
+  connectBtn.position(5, 5); // Position the button in the top left of the screen.
+  connectBtn.mouseClicked(onConnectButtonClicked); // When the button is clicked, run the onConnectButtonClicked function
+}
+
+function checkPort() {
+  if (!port.opened()) {
+    // If the port is not open, change button text
+    connectBtn.html("Connect to Arduino");
+    // Set background to white
+    background("white");
+    return false;
+  } else {
+    // Otherwise we are connected
+    connectBtn.html("Disconnect");
+
+    return true;
+  }
+}
+
+function onConnectButtonClicked() {
+  // When the connect button is clicked
+  if (!port.opened()) {
+    // If the port is not opened, we open it
+    port.open(BAUD_RATE);
+  } else {
+    // Otherwise, we close it!
+    port.close();
+  }
+}
+
+
+
+
+
+//Here is my arduino code:
+
+#include <Servo.h> //Servo library 
+
+  Servo myServo;     //Creating servo object to control a servo
+  
+  // Initializing servo controller pin
+  int servo = 9;
+  int position = 0;
+  
+  // Defining my joystick pins
+  int x = A0;
+  int y = A1;
+  
+  //initialiizng LED pin
+  int LED = 2;
+  
+  //threshold for joystick movement
+  int threshold = 500;
+  
+  //Set up block
+  void setup() {
+    Serial.begin(9600); //Beginning serial comms
+    Serial.setTimeout(10); // set the timeout for parseINT
+    myServo.attach(servo); // Attaching pin 9 to servo
+    pinMode(LED, OUTPUT); //setting pin 2 as output for LED
+  
+  }
+  // The Serial avaliable loop below is modified from slide 22 in L10
+  //The infinite loop
+  void loop() {
+  
+    if (Serial.available() > 0) { //If theres serial data
+      position = Serial.parseInt(); // read int from webpage
+    if (position >= 0 && position <= 180) {
+      myServo.write(position); // Set servo position
+      delay(100);
+    }
+    }
+    //Enter loop when moved
+    if (analogRead(y) > threshold){
+      Serial.println(y);
+      delay(100);
+    }
+    //Enter loop for x axis
+    if (analogRead(x) > threshold){
+      digitalWrite(LED, HIGH);   
+    }else{
+      digitalWrite(LED, LOW);
+    }
+      }
+</code>
+    </pre>
+  </body>
+</html>
